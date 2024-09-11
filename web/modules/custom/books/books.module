@@ -1,0 +1,177 @@
+<?php
+
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Connections\Database\Queries\QueryManager;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\Modules\MetaTag\MetagEnum;
+use Mini\Cms\Modules\MetaTag\MetaTag;
+use Mini\Cms\Routing\Route;
+use Mini\Modules\custom\books\src\Modal\Books;
+use Mini\Modules\custom\books\src\Modal\Statics;
+use Symfony\Component\HttpFoundation\Request;
+
+function books_view_data_alter(array &$variables, string $file_name): void {
+
+    if($file_name === 'home_page.php') {
+        $variables['books_count'] = get_global('books_count');
+        $variables['books_recent'] = get_global('books_recent');
+        $variables['books_read'] = get_global('books_read');
+        $variables['books_count_percentage'] = get_global('books_count_percentage');
+        $variables['books_read_percentage'] = get_global('books_read_percentage');
+        $variables['books_recent_percentage'] = get_global('books_recent_percentage');
+        $variables['books_recent_authors'] = get_global('books_recent_authors');
+    }
+}
+
+function books_meta_data_initialize_alter(MetaTag &$metaTag, Request $request, Route $route): void
+{
+    $metaTag->set(MetagEnum::Title,'Study material stores');
+    $route->setRouteTitle("Study material stores");
+}
+
+function books_pre_assets_build(array &$assets, string $section_name, \Mini\Cms\Controller\Route $route): void
+{
+    /**@var $loaded Route **/
+    $loaded = $route->getLoadedRoute();
+    $is_only_admin = count($loaded->getRoles()) === 1 && in_array("administrator", $loaded->getRoles());
+
+    if ($section_name == 'head' && !$is_only_admin) {
+       foreach ($assets as $key=>$asset) {
+           if($asset !== '<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet"/>|ext-lib' &&
+               $asset !== '/themes/books/src/assets/css/style.css' &&
+               $asset !== '<meta http-equiv="X-UA-Compatible" content="IE=edge">|ext-lib' &&
+               $asset !== '<meta name="viewport" content="width=device-width, initial-scale=1.0">|ext-lib' &&
+               $asset !== '/themes/books/src/assets/css/forms.css'){
+               unset($assets[$key]);
+           }
+       }
+    }
+}
+
+/**
+ * @throws Exception
+ */
+function books_user_book_read(): array
+{
+    $conditions = [
+        [
+            'field' => 'statical_type',
+            'operator' => '=',
+            'value' => 'STATICAL_READ',
+            'conjunction' => 'AND'
+        ],
+        [
+            'field' => 'statical_user',
+            'operator' => '=',
+            'value' => (new CurrentUser())->id(),
+            'conjunction' => 'AND'
+        ],
+    ];
+    $statical_modal = new Statics();
+    $query = new QueryManager(Database::database());
+    $query->select($statical_modal->getMainTable(), 'ss');
+    $query->addConditions($conditions);
+    $query->orderBy($statical_modal->getMainTable().'_created', 'DESC');
+    $query->execute();
+    return $query->fetchAll();
+}
+
+/**
+ * @throws Exception
+ */
+function books_books_count():int
+{
+    $book_modal = new Books();
+    $query = new QueryManager(Database::database());
+    $query->select($book_modal->getMainTable(), 'bb');
+    $query->selectFields(['COUNT(book_id) AS count']);
+    $query->execute();
+    $result = $query->fetch();
+    return $result['count'] ?? 0;
+}
+
+function books_recent_books(): bool|array
+{
+    $date = new DateTime('-7 days');
+    $book_modal = new Books();
+    $query = new QueryManager(Database::database());
+    $query->select($book_modal->getMainTable(), 'bb');
+    $query->addCondition($book_modal->getMainTable().'_created',$date->format('Y-m-d'),'>=');
+    $query->orderBy($book_modal->getMainTable().'_created','DESC');
+    $query->execute();
+    return $query->fetchAll();
+}
+
+function books_recent_authors(): bool|array
+{
+    $recent = books_recent_books();
+    $users = [];
+    $users_names = [];
+    foreach ($recent as $r) {
+        $user = \Mini\Cms\Entities\User::load($r['books_uid']);
+        if(!in_array($user->getName(), $users_names)) {
+            $users[] = [
+                'first_name' => $user->getFirstName(),
+                'last_name' => $user->getLastName(),
+                'mail' => $user->getEmail(),
+                'image' => $user->getImage(),
+                'joined' => time_ago($user->getCreated()),
+                'profileName' => $user->getFirstname() . ' ' . $user->getLastname(),
+                'imgSrc' => $user->getImage(),
+                'updatedTime' => time_ago($user->getCreated()),
+                'message' => $user->getFirstname() . ' ' . ' have '.count(books_on_author($user->getUid())). ' books on app'
+            ];
+            $users_names[] = $user->getName();
+        }
+    }
+    return $users;
+}
+
+function books_recent_dashboard(): array
+{
+    $recent = books_recent_books();
+    $books = [];
+    foreach ($recent as $r) {
+        $books[] = [
+            'productName' => $r['title'],
+            'productNumber' => $r['isbn'],
+            'payment' => $r['payment'] ?? 'free',
+            'status' => $r['status'] ?? 'Inactive',
+            'statusColor' => (!empty($r['status']) && $r['status'] == 'Active' ? 'primary' : 'danger'),
+        ];
+    }
+    return $books;
+}
+
+function books_calculate_percentage(int $total, int $score): int|string
+{
+    if($total === 0 || $score === 0) {
+        return 0;
+    }
+    $percentage = ($score / $total) * 100;
+    return number_format($percentage, 2);
+}
+
+/**
+ * @throws Exception
+ */
+function books_global_definitions_alter(): void
+{
+    define_global('books_read', books_user_book_read());
+    define_global('books_count', books_books_count());
+    define_global('books_recent', books_recent_books());
+    define_global('books_count_percentage', books_calculate_percentage(10000,get_global('books_count')));
+    define_global('books_read_percentage', books_calculate_percentage(get_global('books_count'), count(get_global('books_read'))));
+    define_global('books_recent_percentage', books_calculate_percentage(get_global('books_count'), count(get_global('books_recent'))));
+    define_global('books_recent_authors', books_recent_authors());
+}
+
+function books_on_author(int $author_id): bool|array
+{
+    $book_modal = new Books();
+    $query = new QueryManager(Database::database());
+    $query->select($book_modal->getMainTable(), 'bb');
+    $query->addCondition($book_modal->getMainTable().'_uid',$author_id);
+    $query->execute();
+    return $query->fetchAll();
+}

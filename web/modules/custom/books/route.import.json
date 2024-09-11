@@ -1,0 +1,38 @@
+[
+  {
+    "id": "a7322f9d-3dd0-4be0-8bd4-a156b5-20b74-4299-9665-444",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET"
+      ],
+      "roles": [
+        "administrator",
+        "authenticated",
+        "anonymous"
+      ]
+    },
+    "name": "DashboardEndpoints",
+    "description": "This is for displaying content by terms",
+    "url": "/dashboard/endpoints/query/{type}",
+    "handler": "Mini\\Modules\\custom\\books\\src\\Routes\\DashboardEndpoints"
+  },
+  {
+    "id": "a7322f9d-3dd85-7575-0-4be0-8bd4-a156b5-20b74-4299-9665-44475483-296754-83927",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "roles": [
+        "administrator",
+        "authenticated"
+      ]
+    },
+    "name": "New Book",
+    "description": "This is for adding new book",
+    "url": "/books/add",
+    "handler": "Mini\\Modules\\custom\\books\\src\\Routes\\NewBook"
+  }
+]
