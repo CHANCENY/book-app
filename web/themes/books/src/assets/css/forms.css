@@ -468,7 +468,7 @@ details summary::-webkit-details-marker {
 }
 
 .form-wrapper .form form {
-    width: 50%;
+    width: 100%;
 }
 .nice-form-group progress {
     display: block;
@@ -502,4 +502,9 @@ details summary::-webkit-details-marker {
     outline: none;
     position: relative;
     padding: 10px;
+}
+
+.nice-form-group span {
+    font-size: 10px;
+    color: var(--color-info-dark);
 }

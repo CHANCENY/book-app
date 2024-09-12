@@ -4,7 +4,9 @@
     "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">|ext-lib",
     "<link href=\"https://fonts.googleapis.com/icon?family=Material+Icons+Sharp\" rel=\"stylesheet\"/>|ext-lib",
     "/themes/books/src/assets/css/style.css",
-    "/themes/books/src/assets/css/forms.css"
+    "/themes/books/src/assets/css/forms.css",
+    "/themes/books/src/assets/css/grids.css",
+    "/themes/books/src/assets/css/cards.css"
   ],
   "footer": [
     "/themes/books/src/assets/constants/recent-order-data.js",

@@ -625,3 +625,13 @@ main .recent-orders a {
   }
 }
 /* END MEDIA QUERIES */
+
+.top-wrapper {
+  width: 100%;
+}
+.button {
+  border: 2px solid var(--color-dark);
+  border-radius: 6px;
+  padding: 4px;
+  display: inline-flex;
+}

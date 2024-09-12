@@ -6,10 +6,14 @@ use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\MetaTag\MetagEnum;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Routing\Route;
+use Mini\Modules\custom\books\src\Modal\BookCategory;
 use Mini\Modules\custom\books\src\Modal\Books;
 use Mini\Modules\custom\books\src\Modal\Statics;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Hooks implementations
+ */
 function books_view_data_alter(array &$variables, string $file_name): void {
 
     if($file_name === 'home_page.php') {
@@ -41,11 +45,59 @@ function books_pre_assets_build(array &$assets, string $section_name, \Mini\Cms\
                $asset !== '/themes/books/src/assets/css/style.css' &&
                $asset !== '<meta http-equiv="X-UA-Compatible" content="IE=edge">|ext-lib' &&
                $asset !== '<meta name="viewport" content="width=device-width, initial-scale=1.0">|ext-lib' &&
-               $asset !== '/themes/books/src/assets/css/forms.css'){
+               $asset !== '/themes/books/src/assets/css/forms.css' &&
+               $asset !== '/themes/books/src/assets/css/grids.css' &&
+               $asset !== '/themes/books/src/assets/css/cards.css'){
                unset($assets[$key]);
            }
        }
     }
+    if($loaded->getRouteId() === 'dc551189-d1e1-4d56-b331-2bf50956c957') {
+        if ($section_name == 'head' && !$is_only_admin) {
+            foreach ($assets as $key => $asset) {
+                if ($asset !== '<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet"/>|ext-lib' &&
+                    $asset !== '/themes/books/src/assets/css/style.css' &&
+                    $asset !== '<meta http-equiv="X-UA-Compatible" content="IE=edge">|ext-lib' &&
+                    $asset !== '<meta name="viewport" content="width=device-width, initial-scale=1.0">|ext-lib' &&
+                    $asset !== '/themes/books/src/assets/css/forms.css' &&
+                    $asset !== '/themes/books/src/assets/css/grids.css') {
+                    unset($assets[$key]);
+                }
+            }
+        }
+    }
+}
+
+function books_access_denied_error(): void
+{
+    $route = new Route('d-3dd85-7575-0-4be0-8bd4-a156b5-20b7');
+    \Mini\Cms\Mini::redirect($route->replacePlaceholdersInUrl(['error_name'=>403]))->send();
+}
+
+function books_not_found_alter(string $path): void
+{
+    $route = new Route('d-3dd85-7575-0-4be0-8bd4-a156b5-20b7');
+    \Mini\Cms\Mini::redirect($route->replacePlaceholdersInUrl(['error_name'=>404]))->send();
+}
+
+function books_post_request_alter(Request &$request): void
+{
+    if($request->getRequestUri() === '/user/register') {
+        $email = $request->request->get('email');
+        if($email) {
+            $list = explode('@', $email);
+            $username = $list[0];
+            $list = explode('.', $username);
+            $username = $list[0];
+            $request->request->set('username', $username);
+        }
+    }
+}
+
+function books_controller_not_found()
+{
+    $route = new Route('d-3dd85-7575-0-4be0-8bd4-a156b5-20b7');
+    \Mini\Cms\Mini::redirect($route->replacePlaceholdersInUrl(['error_name'=>500]))->send();
 }
 
 /**
@@ -174,4 +226,15 @@ function books_on_author(int $author_id): bool|array
     $query->addCondition($book_modal->getMainTable().'_uid',$author_id);
     $query->execute();
     return $query->fetchAll();
+}
+
+function books_category_books_count(int $category_id): int
+{
+    $book_modal = new Books();
+    $query = new QueryManager(Database::database());
+    $query->select($book_modal->getMainTable(), 'cc');
+    $query->selectFields(['COUNT(book_id) AS count']);
+    $query->addCondition('category_id',$category_id);
+    $query->execute();
+    return $query->fetch()['count'] ?? 0;
 }
