@@ -209,7 +209,7 @@ function books_calculate_percentage(int $total, int $score): int|string
         return 0;
     }
     $percentage = ($score / $total) * 100;
-    return number_format($percentage, 2);
+    return number_format($percentage, 1);
 }
 
 /**

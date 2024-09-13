@@ -4,7 +4,6 @@ if(pdfLinks) {
     Array.from(pdfLinks).forEach((a_tag)=>{
 
         a_tag.addEventListener('click',(e)=> {
-            e.preventDefault();
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/event/book/emitter',true);
             xhr.onload = function () {
