@@ -36,6 +36,8 @@ class DashboardEndpoints implements ControllerInterface
                 case 'recent_books':
                     $data = books_recent_dashboard();
                     break;
+                case 'live_books':
+                    $data = books_active_books();
             }
             $this->response->setContentType(ContentType::APPLICATION_JSON)
                 ->setStatusCode(StatusCode::OK)

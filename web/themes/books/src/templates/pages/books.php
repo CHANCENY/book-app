@@ -14,6 +14,7 @@
                 <?php
 
                 $image = $file->file($book->thumbnail);
+                $pdf = \Mini\Cms\Modules\FileSystem\File::load($book->pdf_id);
                 $category = null;
                 $user = null;
                 if(isset($categories[$book->category_id])) {
@@ -45,7 +46,7 @@
 
                     </div>
                     <div class="card__img"></div>
-                    <a href="/book/<?= $book->book_id ?>/open" class="card_link">
+                    <a href="/<?= ($book->status ?? 'Inactive') === 'Active' ? $pdf->getFilePath() : null; ?>" class="card_link pdf-link" data="<?= $book->book_id ?>">
                         <div class="card__img--hover" style="background-image: url('/<?= $image->getFilePath() ?>');"></div>
                     </a>
                     <div class="card__info">

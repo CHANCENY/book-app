@@ -68,7 +68,6 @@
             <thead>
             <tr>
                 <th>TITLE</th>
-                <th>ISBN</th>
                 <th>PAY</th>
                 <th>STATUS</th>
                 <th></th>

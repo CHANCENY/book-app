@@ -2,11 +2,16 @@
 
 namespace Mini\Modules\custom\books\src\Routes;
 
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Connections\Database\Queries\QueryManager;
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Mini;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Modules\custom\books\src\Modal\Statics;
 
 class Error implements ControllerInterface
 {
@@ -52,5 +57,40 @@ class Error implements ControllerInterface
         $this->response->setStatusCode(StatusCode::OK)
             ->write('<main><div class="form-wrapper"><h1>'.$error_title.'</h1><p>'.$error_message.'</p></div></main>');
 
+    }
+
+    public function eventEmitter(): void
+    {
+        $book_id = json_decode($this->request->getContent())->book_id;
+        $event_title = json_decode($this->request->getContent())->event_title;
+        $statical_modal = new Statics();
+        if($book_id && $event_title) {
+            $statical_modal->get((new CurrentUser())->id(), 'statical_user');
+            $statical_modal->update(['statical_active'=>2],(new CurrentUser())->id());
+
+            $statical_modal = new Statics();
+            $book = $statical_modal->get($book_id,'statical_book')->getAt(0);
+            if($book) {
+                $statical_modal->update(['statical_active'=> $event_title === 'Opened','statical_time' => time()],$book_id);
+            }
+            else {
+                $data = [
+                    'statical_active'=>1,
+                    'statical_book'=>$book_id,
+                    'statical_type' => 'STATICAL_READ',
+                    'statical_user' => (new CurrentUser())->id(),
+                    'statical_time' => time(),
+                ];
+                $statical_modal->store($data);
+            }
+            $this->response->setStatusCode(StatusCode::OK)
+                ->setContentType(ContentType::APPLICATION_JSON)
+                ->write(json_encode(['book_id' => $book_id, 'event_title' => $event_title]));
+        }
+        else {
+            $this->response->setStatusCode(StatusCode::BAD_REQUEST)
+                ->setContentType(ContentType::APPLICATION_JSON)
+                ->write(json_encode(['book_id' => null, 'event_title' => null]));
+        }
     }
 }

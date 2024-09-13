@@ -12,6 +12,21 @@ document.addEventListener("DOMContentLoaded", (ev) => {
   // Sales Analytics
   const salesAnalytics = document.getElementById("analytics");
   buildSalesAnalytics(salesAnalytics);
+  setInterval(()=>{
+    const xhrrAA = new XMLHttpRequest();
+    xhrrAA.open('GET', '/dashboard/endpoints/query/live_books',false);
+    xhrrAA.onload = function () {
+      if(this.status === 200) {
+        try{
+          SALES_ANALYTICS_DATA = JSON.parse(this.responseText);
+          buildSalesAnalytics(salesAnalytics);
+        }catch (e) {
+          SALES_ANALYTICS_DATA = [];
+        }
+      }
+    }
+    xhrrAA.send();
+  },1000);
 });
 
 // Document Builder
@@ -25,10 +40,8 @@ const buildTableBody = () => {
     bodyContent += `
       <tr>
         <td>${row.productName}</td>
-        <td>${row.productNumber}</td>
-        <td>${row.payment}</td>
         <td class="${row.statusColor}">${row.status}</td>
-        <td class="primary">Details</td>
+        <td class="primary"><a href="/${row.pdf}" class="pdf-link" data="${row.id}">Open</a></td>
       </tr>
     `;
   }
@@ -66,7 +79,7 @@ const buildUpdatesList = () => {
 
 const buildSalesAnalytics = (element) => {
   const salesAnalyticsData = SALES_ANALYTICS_DATA;
-
+  element.innerHTML = '';
   for (const analytic of salesAnalyticsData) {
     const item = document.createElement("div");
     item.classList.add("item");
@@ -79,10 +92,9 @@ const buildSalesAnalytics = (element) => {
       <div class="right">
         <div class="info">
           <h3>${analytic.title}</h3>
-          <small class="text-muted"> Last 24 Hours </small>
+          <small class="text-muted"> ${analytic.created} </small>
         </div>
-        <h5 class="${analytic.colorClass}">${analytic.percentage}%</h5>
-        <h3>${analytic.sales}</h3>
+        <h5 class="${analytic.colorClass}">${analytic.status}</h5>
       </div>
     `;
 

@@ -66,6 +66,11 @@ function books_pre_assets_build(array &$assets, string $section_name, \Mini\Cms\
             }
         }
     }
+    if($loaded->getRouteId() === 'a7322f9d-3dd008-877-66500-898-7875-5554-83927-5958-9000-9000--999-54848') {
+        if ($section_name == 'head') {
+
+        }
+    }
 }
 
 function books_access_denied_error(): void
@@ -183,6 +188,7 @@ function books_recent_dashboard(): array
 {
     $recent = books_recent_books();
     $books = [];
+    $file = new \Mini\Cms\Modules\FileSystem\File();
     foreach ($recent as $r) {
         $books[] = [
             'productName' => $r['title'],
@@ -190,6 +196,8 @@ function books_recent_dashboard(): array
             'payment' => $r['payment'] ?? 'free',
             'status' => $r['status'] ?? 'Inactive',
             'statusColor' => (!empty($r['status']) && $r['status'] == 'Active' ? 'primary' : 'danger'),
+            'pdf' => ($r['status'] ?? 'Inactive') === 'Active' ? $file->file($r['pdf_id'])->getFilePath() : '',
+            'id' => $r['book_id']
         ];
     }
     return $books;
@@ -237,4 +245,31 @@ function books_category_books_count(int $category_id): int
     $query->addCondition('category_id',$category_id);
     $query->execute();
     return $query->fetch()['count'] ?? 0;
+}
+
+function books_active_books(): array
+{
+    $statical_modal = new Statics();
+    $query = new QueryManager(Database::database());
+    $query->select($statical_modal->getMainTable(), 'ss');
+    $query->selectFields(['statical_book','title', $statical_modal->getMainTable().'_created', 'book_id','statical_active','statical_time']);
+    $query->innerJoin('books', 'bb', 'ss.statical_book =bb.book_id');
+    $query->orderBy('statical_active','ASC');
+    $query->limit(4);
+    $query->execute();
+    $data = $query->fetchAll();
+    $books = [];
+    $bookss = new Books();
+    $total = count($bookss->all()->getRecords());
+    foreach ($data as $book) {
+        $books[] = [
+            'itemClass' => 'online',
+            'colorClass'=> ($book['statical_active'] === 1) ? 'success' : 'danger',
+            'title' => $book['title'],
+            'icon' => 'stream',
+            'created' => time_ago((new DateTime("@".$book['statical_time']))->getTimestamp()),
+            'status' => ($book['statical_active'] === 1) ? 'online' : 'offline'
+        ];
+    }
+    return $books;
 }

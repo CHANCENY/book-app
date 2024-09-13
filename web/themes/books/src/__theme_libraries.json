@@ -9,6 +9,7 @@
     "/themes/books/src/assets/css/cards.css"
   ],
   "footer": [
+    "/themes/books/src/assets/js/event-emitter.js",
     "/themes/books/src/assets/constants/recent-order-data.js",
     "/themes/books/src/assets/constants/update-data.js",
     "/themes/books/src/assets/constants/sales-analytics-data.js",

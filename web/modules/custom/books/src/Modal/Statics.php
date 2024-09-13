@@ -21,8 +21,8 @@ class Statics extends Modal
         $this->columns = array(
             self::buildColumnInstance(Number::class)->name('static_id')->size(11)->autoIncrement(true)->primary(true)->parent($this),
             self::buildColumnInstance(VarChar::class)->name('statical_type')->size(20)->description("statical type of book on user")->parent($this),
-//            self::buildColumnInstance(Number::class)->name('statical_count')->size(11)->description('statical count of book on user')->parent($this),
-//            self::buildColumnInstance(Number::class)->name('statical_percentage')->size(11)->description('statical percentage of book on user')->parent($this),
+            self::buildColumnInstance(Number::class)->name('statical_time')->size(11)->description('statical time of book on user')->parent($this)->setAsDefined(time()),
+           self::buildColumnInstance(Number::class)->name('statical_active')->size(11)->description('statical active of book on user')->parent($this),
             self::buildColumnInstance(Number::class)->name('statical_book')->size(11)->description('statical book on user')->parent($this),
             self::buildColumnInstance(Number::class)->name('statical_user')->size(11)->description('statical user of book on user')->parent($this),
         );

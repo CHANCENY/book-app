@@ -2,10 +2,13 @@
 
 namespace Mini\Modules\custom\books\src\Routes;
 
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
+use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Mini;
+use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Services\Services;
 use Mini\Modules\custom\books\src\Modal\BookCategory;
 use Mini\Modules\custom\books\src\Modal\Books;
@@ -95,6 +98,27 @@ class NewBook implements ControllerInterface
             $book = $this->books->get($book_id)->getAt(0);
             Mini::currentRoute()->setRouteTitle($book->title);
             $this->response->write(Services::create('render')->render('book_reading.php', ['book' => $book]));
+        }
+    }
+
+    public function bookListing(): void
+    {
+        $books = $this->books->range(20, 0)->getRecords();
+        $this->response->write(Services::create('render')->render('books.php', ['books' => $books]));
+    }
+
+    public function pdfReader(): void
+    {
+        $pdf_fid = $this->request->query->get('fid');
+        if($pdf_fid) {
+            $file = File::load($pdf_fid);
+            if($file instanceof File) {
+                if($file->fetType() == 'application/pdf') {
+                    $this->response->setContentType(ContentType::APPLICATION_PDF)
+                        ->setStatusCode(StatusCode::OK)
+                        ->write(file_get_contents($file->getFilePath()));
+                }
+            }
         }
     }
 }

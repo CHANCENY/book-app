@@ -1,4 +1,4 @@
-const SALES_ANALYTICS_DATA = [
+let SALES_ANALYTICS_DATA = [
   {
     itemClass: "online",
     icon: "shopping_cart",
@@ -24,3 +24,17 @@ const SALES_ANALYTICS_DATA = [
     sales: "849",
   },
 ];
+
+
+const xhrrA = new XMLHttpRequest();
+xhrrA.open('GET', '/dashboard/endpoints/query/live_books',false);
+xhrrA.onload = function () {
+  if(this.status === 200) {
+    try{
+      SALES_ANALYTICS_DATA = JSON.parse(this.responseText)
+    }catch (e) {
+      SALES_ANALYTICS_DATA = [];
+    }
+  }
+}
+xhrrA.send();
