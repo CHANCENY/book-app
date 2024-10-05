@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6200EE">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Android-Like App</title>
+
+    <!-- Link to a Google Material Icons font -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"
+        integrity="sha512-6sSYJqDreZRZGkJ3b+YfdhB3MzmuP9R7X1QZ6g5aIXhRvR1Y/N/P47jmnkENm7YL3oqsmI6AK+V6AD99uWDnIw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="/assets/styles/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+
+    <!-- App bar at the top -->
+    <div class="app-bar">
+        <span class="material-icons" id="menu-btn">menu</span>
+        <h1>Books Library</h1>
+        <span class="material-icons" id="search-icon">search</span>
+    </div>
+
+    <!-- Navigation drawer -->
+    <div class="nav-drawer" id="nav-drawer">
+        <a href="/home">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/settings">Settings</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Overlay when navigation drawer is open -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Search container - moved above content -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search..." style="display: none;">
+    </div>
+
+    <!-- Main content area -->
+    <div class="content" id="content">
+        <div class="card">
+            <h2>Welcome</h2>
+            <p>This page is styled to resemble a native Android app.</p>
+        </div>
+        <div class="card">
+            <h2>Features</h2>
+            <p>Responsive design, toolbar, and cards styled like native elements.</p>
+            <a href="#" class="button">Try it</a>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="/assets/scripts/script.js"></script>
+    <script src="assets/scripts/navigator.js"></script>
+    <script src="assets/scripts/forms.js"></script>
+</body>
+
+
+</html>
