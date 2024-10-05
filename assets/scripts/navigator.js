@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create an XMLHttpRequest to fetch data
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `${BASE_URL}/api/content/pages?page=${page}`, true);
-            
+            xhr.withCredentials = true;
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
