@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Create an XMLHttpRequest to fetch data
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', `${BASE_URL}/api/pages?page=${page}`, true);
+            xhr.open('GET', `${BASE_URL}/api/content/pages?page=${page}`, true);
             
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
