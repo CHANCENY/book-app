@@ -43,7 +43,7 @@ function formEventSubscribers() {
             // Create an XMLHttpRequest to send form data
             const xhr = new XMLHttpRequest();
             xhr.open('POST',BASE_URL+ SUBMISSION_URL, true); // Use form action as URL
-        
+            xhr.setRequestHeader('Authentication',localStorage.getItem('session-tag') || 'anonymous-session');
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
@@ -143,11 +143,15 @@ function anchorEventSubcribers() {
             // Create an XMLHttpRequest to fetch data
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `${BASE_URL}/api/content/pages?page=${page}`, true);
-            xhr.withCredentials = true;
+            xhr.setRequestHeader('Authentication',localStorage.getItem('session-tag') || 'anonymous-session')
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const responseData = JSON.parse(xhr.responseText);
+
+                    if(responseData.message && responseData.message.length > 0) {
+                        showToast(responseData.message, 'Info');
+                    }
                     
                     // Check for error in response
                     if (responseData.error) {
@@ -185,4 +189,8 @@ function anchorEventSubcribers() {
             xhr.send();
         });
     }
+}
+
+function logout() {
+    localStorage.removeItem('session-tag');
 }
