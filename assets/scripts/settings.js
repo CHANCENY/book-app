@@ -149,6 +149,9 @@ function anchorEventSubcribers() {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const responseData = JSON.parse(xhr.responseText);
                     if(responseData.message && responseData.message.length > 0) {
+                        if(responseData.message === 'Logged out successfully') {
+                            logout();
+                        }
                         showToast(responseData.message, 'Info');
                     }
                     
