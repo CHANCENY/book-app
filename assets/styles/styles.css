@@ -512,9 +512,10 @@ input[type="password"]:focus {
 }
 
 .course-item {
-    display: flex;
+    /* display: flex; */
     justify-content: space-between;
     padding: 20px;
+    padding-left: 0;
     border-bottom: 1px solid #ddd;
 }
 
@@ -525,8 +526,12 @@ input[type="password"]:focus {
 .course-title {
     font-weight: bold;
     color: #333;
+    text-decoration: none;
 }
 
 .available-books {
+    display: block !important;
+    font-size: small;
     color: #555;
+    margin-top: 10px;
 }
