@@ -14,7 +14,11 @@ function auth() {
     xhr.onload = function() {
         if(this.status === 200) {
             const data = JSON.parse(this.responseText);
+            console.log(data);
             if(data.menus) {
+                if(data.session_action && data.session_action === 'delete') {
+                    logout();
+                }
                 menus.innerHTML = '';
                 const menus_list = data.menus;
                 Object.create(menus_list).forEach(element => {
