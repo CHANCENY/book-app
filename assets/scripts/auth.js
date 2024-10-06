@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     auth();
    setInterval(()=>{
     auth();
-   }, 20000);
+   }, 2000);
 });
 
 function auth() {
