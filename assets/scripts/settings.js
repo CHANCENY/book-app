@@ -48,6 +48,10 @@ function formEventSubscribers() {
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const responseData = JSON.parse(xhr.responseText);
+
+                    if(responseData.session && responseData.session.length > 0) {
+                        localStorage.setItem('session-tag',responseData.session);
+                    }
                     // Check for error in response
                     if (responseData.error) {
                         console.error('No data found');
