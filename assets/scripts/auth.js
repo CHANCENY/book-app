@@ -1,9 +1,6 @@
 
 document.addEventListener('DOMContentLoaded',()=>{
     auth();
-   setInterval(()=>{
-    auth();
-   }, 2000);
 });
 
 function auth() {

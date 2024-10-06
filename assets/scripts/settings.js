@@ -7,10 +7,14 @@ function formEventSubscribers() {
     const body = document.body; // Select the entire body
     const forms = body.getElementsByTagName('form'); // Get all forms in the body
 
-    // Create a loading overlay
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'loading-overlay';
-    
+    let loadingOverlay = null;
+    if(document.querySelector('.loading-overlay')) {
+        loadingOverlay = document.querySelector('.loading-overlay');
+    }
+    else {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'loading-overlay';
+    }
     // Use FontAwesome spinner icon instead of text
     loadingOverlay.innerHTML = '<i class="fa-duotone fa-solid fa-spinner-third fa-spin"></i>'; // Add spinner icon
     document.body.appendChild(loadingOverlay); // Append to body
@@ -61,6 +65,7 @@ function formEventSubscribers() {
                         const contentDiv = document.getElementById('content'); // Select content div
                         contentDiv.innerHTML = content; // Replace content inside #content
                         showToast(responseData.message,'Info');
+                        auth();
                         anchorEventSubcribers();
                         formEventSubscribers();
                     }
@@ -97,9 +102,14 @@ function anchorEventSubcribers() {
     const body = document.body; // Select the entire body
     const links = body.getElementsByTagName('a'); // Get all links in the body
 
-    // Create a loading overlay
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'loading-overlay';
+    let loadingOverlay = null;
+    if(document.querySelector('.loading-overlay')) {
+        loadingOverlay = document.querySelector('.loading-overlay');
+    }
+    else {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'loading-overlay';
+    }
     
     // Use FontAwesome spinner icon instead of text
     loadingOverlay.innerHTML = '<i class="fa-duotone fa-solid fa-spinner-third fa-spin"></i>'; // Add spinner icon
@@ -163,6 +173,7 @@ function anchorEventSubcribers() {
                         const content = responseData.content; // Get HTML content
                         const contentDiv = document.getElementById('content'); // Select content div
                         contentDiv.innerHTML = content; // Replace content inside #content
+                        auth();
                         anchorEventSubcribers();
                         formEventSubscribers();
                     }

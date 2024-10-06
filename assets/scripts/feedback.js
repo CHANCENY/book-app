@@ -9,7 +9,13 @@ function showToast(message, type = 'info') {
     }
 
     // Create the toast message element
-    const toast = document.createElement('div');
+    let toast = null;
+    if(document.querySelector('.toast') && document.querySelector('.toast').textContent.trim() === message) {
+        toast = document.querySelector('.toast');
+    }
+    else {
+        toast = document.createElement('div');
+    }
     toast.className = `toast ${type}`; // Add type (e.g., 'success', 'error', etc.)
     toast.textContent = message;
 
