@@ -48,15 +48,15 @@ function formEventSubscribers() {
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const responseData = JSON.parse(xhr.responseText);
-                    console.log(responseData)
                     // Check for error in response
                     if (responseData.error) {
                         console.error('No data found');
-                        alert('No data found'); // Alert user if there's an error
+                        showToast(responseData.message,'Info');
                     } else {
                         const content = responseData.content; // Get HTML content
                         const contentDiv = document.getElementById('content'); // Select content div
                         contentDiv.innerHTML = content; // Replace content inside #content
+                        showToast(responseData.message,'Info');
                         anchorEventSubcribers();
                         formEventSubscribers();
                     }

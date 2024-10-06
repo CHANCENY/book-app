@@ -338,7 +338,8 @@ body, html {
 /* General styles for input fields */
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+select {
     width: 100%;
     /* Full width */
     padding: 12px 16px;
