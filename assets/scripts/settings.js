@@ -214,6 +214,7 @@ function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
          div_session = document.createElement('div');
          div_session.style.display = "none";
          div_session.textContent = session_tag;
+         document.getElementsByTagName('body').appendChild(div_session);
     }
     if(session_tag.length > 0 && session_tag.trim() !== "anonymous-session") {
         div_session.textContent = session_tag;
