@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 function auth() {
     const menus = document.getElementById("nav-drawer");
-    const session = localStorage.getItem('session-tag') || 'anonymous-session';
+    const session = sessionTag();
     const xhr = new XMLHttpRequest();
     xhr.open('GET', BASE_URL+'/api/user/status?id='+session, true);
     xhr.onload = function() {
