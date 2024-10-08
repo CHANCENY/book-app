@@ -47,14 +47,14 @@ function formEventSubscribers() {
             // Create an XMLHttpRequest to send form data
             const xhr = new XMLHttpRequest();
             xhr.open('POST',BASE_URL+ SUBMISSION_URL, true); // Use form action as URL
-            xhr.setRequestHeader('Authentication',localStorage.getItem('session-tag') || 'anonymous-session');
+            xhr.setRequestHeader('Authentication',sessionTag());
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const responseData = JSON.parse(xhr.responseText);
 
                     if(responseData.session && responseData.session.length > 0) {
-                        localStorage.setItem('session-tag',responseData.session);
+                        sessionTag(responseData.session);
                     }
                     // Check for error in response
                     if (responseData.error) {
@@ -153,7 +153,7 @@ function anchorEventSubcribers() {
             // Create an XMLHttpRequest to fetch data
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `${BASE_URL}/api/content/pages?page=${page}`, true);
-            xhr.setRequestHeader('Authentication',localStorage.getItem('session-tag') || 'anonymous-session')
+            xhr.setRequestHeader('Authentication', sessionTag())
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
@@ -205,5 +205,22 @@ function anchorEventSubcribers() {
 }
 
 function logout() {
-    localStorage.removeItem('session-tag');
+    sessionTag('', true)
+}
+
+function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
+     let div_session = document.getElementById("session-tag");
+    if(!div_session) {
+         div_session = document.createElement('div');
+         div_session.style.display = "none";
+         div_session.textContent = session_tag;
+    }
+    if(session_tag.length > 0 && session_tag.trim() !== "anonymous-session") {
+        div_session.textContent = session_tag;
+    }
+    if(remove_tag === true) {
+        div_session.remove();
+    }
+    session_tag = div_session.textContent.trim();
+    return session_tag;
 }
