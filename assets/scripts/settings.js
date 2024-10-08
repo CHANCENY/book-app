@@ -70,24 +70,18 @@ function formEventSubscribers() {
                         formEventSubscribers();
                     }
                 } else {
-                    console.error('Request failed with status: ', xhr.status);
+                    console.error('Submission failed with status: ', xhr.status);
                 }
 
-                // Delay hiding the loading overlay and progress bar
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
-                    progressBar.style.width = '0%'; // Reset progress bar
-                }, 5000); // 5 seconds delay
+                loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
+                progressBar.style.width = '0%'; // Reset progress bar
             };
 
             // Handle errors
             xhr.onerror = function() {
-                console.error('Request failed');
-                // Delay hiding the loading overlay and progress bar
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
-                    progressBar.style.width = '0%'; // Reset progress bar
-                }, 5000); // 5 seconds delay
+                loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
+                progressBar.style.width = '0%'; // Reset progress bar
+                showToast("Submission failed","info")
             };
 
             // Create FormData object to send form data
@@ -181,21 +175,16 @@ function anchorEventSubcribers() {
                     console.error('Request failed with status: ', xhr.status);
                 }
 
-                // Delay hiding the loading overlay and progress bar
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
-                    progressBar.style.width = '0%'; // Reset progress bar
-                }, 3000); // 5 seconds delay
+                loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
+                progressBar.style.width = '0%'; // Reset progress bar
             };
 
             // Handle errors
             xhr.onerror = function() {
                 console.error('Request failed');
-                // Delay hiding the loading overlay and progress bar
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
-                    progressBar.style.width = '0%'; // Reset progress bar
-                }, 3000); // 5 seconds delay
+                loadingOverlay.style.display = 'none'; // Hide loading overlay after delay
+                progressBar.style.width = '0%'; // Reset progress bar
+                showToast("Cant load page");
             };
 
             // Send the request
