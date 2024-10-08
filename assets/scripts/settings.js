@@ -211,7 +211,7 @@ function logout() {
 function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
      // Select the meta tag with name="session"
      const metaTag = document.querySelector('meta[name="session"]');
-    if(metaTag && session_tag.length > 0) {
+    if(metaTag && session_tag.length > 0 && session_tag !== "anonymous-session") {
         metaTag.setAttribute('content', session_tag);
     }
     if(remove_tag === true) {
