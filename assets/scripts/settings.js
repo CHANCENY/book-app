@@ -209,19 +209,13 @@ function logout() {
 }
 
 function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
-     let div_session = document.getElementById("session-tag");
-    if(!div_session) {
-         div_session = document.createElement('div');
-         div_session.style.display = "none";
-         div_session.textContent = session_tag;
-         document.getElementsByTagName('body').appendChild(div_session);
-    }
-    if(session_tag.length > 0 && session_tag.trim() !== "anonymous-session") {
-        div_session.textContent = session_tag;
+     // Select the meta tag with name="session"
+     const metaTag = document.querySelector('meta[name="session"]');
+    if(metaTag && session_tag.length > 0) {
+        metaTag.setAttribute('content', session_tag);
     }
     if(remove_tag === true) {
-        div_session.remove();
+        metaTag.setAttribute('content', 'anonymous-session');
     }
-    session_tag = div_session.textContent.trim();
-    return session_tag;
+    return metaTag.getAttribute('content') || 'anonymous-session';
 }
