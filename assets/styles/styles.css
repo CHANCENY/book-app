@@ -8,13 +8,18 @@ body, html {
 
 /* Toolbar similar to native Android app */
 .app-bar {
+    position: fixed;
     background-color: #6200EE;
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.2); */
+    z-index: 1000;
+    width: -webkit-fill-available;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
 }
 
 .app-bar h1 {
