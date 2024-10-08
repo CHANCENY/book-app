@@ -36,6 +36,9 @@ body, html {
 /* Basic content area styled as a native layout */
 .content {
     padding: 16px;
+    position: absolute;
+    width: -webkit-fill-available;
+    margin-top: 50px;
 }
 
 /* Simple card-like container for content blocks */
@@ -329,6 +332,17 @@ body, html {
 .forgot-password-info {
     margin-bottom: 16px;
     /* Space between items */
+}
+
+textarea {
+    width: -webkit-fill-available;
+    /* Full width */
+    padding: 8px;
+    /* Padding */
+    border: 1px solid #ccc;
+    /* Light border */
+    border-radius: 4px;
+    /* Rounded corners */
 }
 
 .login-info label,
