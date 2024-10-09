@@ -209,3 +209,18 @@ function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
     }
     return metaTag.getAttribute('content') || 'anonymous-session';
 }
+
+function checkPDF() {
+    const url = document.getElementById("pdf").getAttribute('data-pdf') // Replace with your PDF file path
+    fetch(url, { method: 'HEAD' }) // Use HEAD to check without downloading the file
+        .then(response => {
+            if (response.ok) {
+                window.open(url);
+            } else {
+                showToast('PDF not accessible. Status: ' + response.status);
+            }
+        })
+        .catch(error => {
+            showToast('Error checking PDF: ' + error.message);
+        });
+}
