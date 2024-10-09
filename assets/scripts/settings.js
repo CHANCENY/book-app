@@ -210,7 +210,8 @@ function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
     return metaTag.getAttribute('content') || 'anonymous-session';
 }
 
-function checkPDF() {
+function checkPDF(event) {
+
     const url = document.getElementById("pdf").getAttribute('data-pdf') // Replace with your PDF file path
     fetch(url, { method: 'HEAD' }) // Use HEAD to check without downloading the file
         .then(response => {
