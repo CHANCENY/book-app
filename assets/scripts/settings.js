@@ -121,7 +121,10 @@ function anchorEventSubcribers() {
 
     // Prevent the default link behavior and show loading effect
     for (let link of links) {
-        link.addEventListener('click', (event) => {
+
+        const temp = link.href;
+        if(!temp.includes('/content/access/file')) {
+ link.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent default behavior
             const page = link.getAttribute('href'); // Get the href of the clicked link
             console.log('Link click silenced: ', page);
@@ -191,6 +194,8 @@ function anchorEventSubcribers() {
             // Send the request
             xhr.send();
         });
+        }
+       
     }
 }
 
