@@ -51,6 +51,7 @@ function formEventSubscribers() {
             // Define the callback for the XMLHttpRequest
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
+                    
                     const responseData = JSON.parse(xhr.responseText);
 
                     if(responseData.session && responseData.session.length > 0) {

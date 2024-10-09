@@ -17,7 +17,7 @@ function showToast(message, type = 'info') {
         toast = document.createElement('div');
     }
     toast.className = `toast ${type}`; // Add type (e.g., 'success', 'error', etc.)
-    toast.textContent = message;
+    toast.innerHTML = message;
 
     // Append the toast to the container
     toastContainer.appendChild(toast);
