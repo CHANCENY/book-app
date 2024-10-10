@@ -204,19 +204,31 @@ function logout() {
 }
 
 function sessionTag(session_tag = 'anonymous-session', remove_tag = false) {
-     // Select the meta tag with name="session"
-     const metaTag = document.querySelector('meta[name="session"]');
-    if(metaTag && session_tag.length > 0 && session_tag !== "anonymous-session") {
-        metaTag.setAttribute('content', session_tag);
+     let flag = false;
+    if(localStorage) {
+        flag = true;
+        if(session_tag.length > 1 && session_tag !== 'anonymous-session') {
+            localStorage.setItem('session-tag', session_tag);
+        }
+        if(remove_tag === true) {
+            localStorage.removeItem('session-tag');
+        }
+        session_tag = localStorage.getItem('session-tag') || 'anonymous-session';
+        console.log('using localstorage')
+        return session_tag;
     }
-    if(remove_tag === true) {
-        metaTag.setAttribute('content', 'anonymous-session');
+
+    if(flag === false) {
+       const metaTag = document.querySelector('meta[name="session"]');
+       if(metaTag && session_tag.length > 0 && session_tag !== "anonymous-session") {
+            metaTag.setAttribute('content', session_tag);
+       }
+       if(remove_tag === true) {
+           metaTag.setAttribute('content', 'anonymous-session');
+        }
+        console.log('using mettag')
+        return metaTag.getAttribute('content') || 'anonymous-session'; 
     }
-    return metaTag.getAttribute('content') || 'anonymous-session';
+    
 }
 
-function checkPDF(event) {
-
-    const url = document.getElementById("pdf").getAttribute('data-pdf') // Replace with your PDF file path
-    window.open(url);
-}
